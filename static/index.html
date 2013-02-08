@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Macchia</title>
+        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    </head>
+    <body class="container">
+        <h1>Macchia</h1>
+        <div class="btn-group">
+            <a href="/prev" class="btn">Prev</a>
+            <a href="/play" class="btn">Play</a>
+            <a href="/next" class="btn">Next</a>
+        </div>
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('a').click(function(event) {
+                    $.ajax($(this).attr('href')).done(function(x, res) {
+                        ;
+                    });
+
+                    return false;
+                })
+            })
+        </script>
+    </body>
+</html>
+    
