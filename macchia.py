@@ -1,4 +1,4 @@
-import dbus
+from spotify import spotify
 import web
 
 urls = (
@@ -9,9 +9,6 @@ urls = (
 )
 
 app  = web.application(urls, globals())
-bus  = dbus.SessionBus()
-obj  = bus.get_object('org.mpris.MediaPlayer2.spotify', '/')
-spot = dbus.Interface(obj, 'org.freedesktop.MediaPlayer2')
 
 class Index:
     def GET(self):
@@ -19,17 +16,17 @@ class Index:
 
 class Play:
     def GET(self):
-        spot.PlayPause()
+        spotify.play()
         return 'ok'
 
 class Prev:
     def GET(self):
-        spot.Previous()
+        spotify.prev()
         return 'ok'
 
 class Next:
     def GET(self):
-        spot.Next()
+        spotify.next()
         return 'ok'
 
 if __name__ == '__main__':
