@@ -1,3 +1,9 @@
+def track_json_info(artist, album, title):
+    import json
+    return json.dumps({'artist': artist,
+                       'album':  album,
+                       'title':  title})
+
 def get_dbus_spotify():
     import dbus
 
@@ -27,6 +33,7 @@ def get_dbus_spotify():
     return DbusSpotify(spot)
 
 def get_osx_spotify():
+    import Foundation
     import ScriptingBridge
 
     spot = ScriptingBridge.SBApplication.applicationWithBundleIdentifier_("com.spotify.client")
@@ -45,7 +52,12 @@ def get_osx_spotify():
             self.iface.previousTrack()
 
         def current_track(self):
-            pass
+            pool = Foundation.NSAutoreleasePool.alloc().init()
+            track = self.iface.currentTrack()
+            del pool
+            return track_json_info(track.artist(),
+                                   track.album(),
+                                   track.name())
 
         def open_uri(self, uri):
             pass

@@ -11,16 +11,23 @@
             <a href="/play" class="btn">Play</a>
             <a href="/next" class="btn">Next</a>
         </div>
+        <dl id="trackinfo">
+        </dl>
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script>
+            function fill_track_infos(infos) {
+                $('#trackinfo').html('<dt>Artist</dt><dd>' + infos.artist + '</dd>' + 
+                                     '<dt>Album</dt><dd>'  + infos.album  + '</dd>' +
+                                     '<dt>Title</dt><dd>'  + infos.Title  + '</dd>')
+            }
+
             $(document).ready(function() {
                 $('a').click(function(event) {
-                    $.ajax($(this).attr('href')).done(function(x, res) {
-                        ;
-                    });
-
+                    $.ajax($(this).attr('href')).done(function(x, res) { ; });
                     return false;
                 })
+
+                $.getJSON('/info', fill_track_infos);
             })
         </script>
     </body>

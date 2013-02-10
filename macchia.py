@@ -5,7 +5,8 @@ urls = (
     '/play', 'Play',
     '/prev', 'Prev',
     '/next', 'Next',
-    '/', 'Index'
+    '/info', 'Info',
+    '/',     'Index'
 )
 
 app  = web.application(urls, globals())
@@ -28,6 +29,10 @@ class Next:
     def GET(self):
         spotify.next()
         return 'ok'
+
+class Info:
+    def GET(self):
+        return spotify.current_track()
 
 if __name__ == '__main__':
     app.run()
