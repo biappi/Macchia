@@ -1,8 +1,9 @@
-def track_json_info(artist, album, title):
+def track_json_info(artist, album, title, art_url):
     import json
-    return json.dumps({'artist': artist,
-                       'album':  album,
-                       'title':  title})
+    return json.dumps({'artist':  artist,
+                       'album':   album,
+                       'title':   title,
+                       'art_url': art_url})
 
 def get_dbus_spotify():
     import dbus
@@ -35,6 +36,8 @@ def get_dbus_spotify():
 def get_osx_spotify():
     import Foundation
     import ScriptingBridge
+    import AppKit
+    import base64
 
     spot = ScriptingBridge.SBApplication.applicationWithBundleIdentifier_("com.spotify.client")
 
@@ -54,10 +57,19 @@ def get_osx_spotify():
         def current_track(self):
             pool = Foundation.NSAutoreleasePool.alloc().init()
             track = self.iface.currentTrack()
+            representation = track.artwork().representations()
+            rep = AppKit.NSBitmapImageRep
+            pngdata = rep.representationOfImageRepsInArray_usingType_properties_(representation,
+                                                                                 AppKit.NSPNGFileType,
+                                                                                 None)
+            b64 = base64.b64encode(pngdata.bytes().tobytes())
+            uri = 'data:image/png;base64,' + b64
+
             del pool
             return track_json_info(track.artist(),
                                    track.album(),
-                                   track.name())
+                                   track.name(),
+                                   uri)
 
         def open_uri(self, uri):
             pass

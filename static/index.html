@@ -13,12 +13,14 @@
         </div>
         <dl id="trackinfo">
         </dl>
+        <img id="cover">
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script>
             function fill_track_infos(infos) {
                 $('#trackinfo').html('<dt>Artist</dt><dd>' + infos.artist + '</dd>' + 
                                      '<dt>Album</dt><dd>'  + infos.album  + '</dd>' +
-                                     '<dt>Title</dt><dd>'  + infos.Title  + '</dd>')
+                                     '<dt>Title</dt><dd>'  + infos.title  + '</dd>')
+                $('#cover').attr('src', infos.art_url)
             }
 
             $(document).ready(function() {
