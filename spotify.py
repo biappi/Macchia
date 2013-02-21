@@ -26,7 +26,11 @@ def get_dbus_spotify():
             self.iface.Previous()
 
         def current_track(self):
-            pass
+            info = self.iface.GetMetadata()
+            return track_json_info(unicode(info['xesam:artist'][0]),
+                                   unicode(info['xesam:album']),
+                                   unicode(info['xesam:title']),
+                                   unicode(info['mpris:artUrl']))
 
         def open_uri(self, uri):
             pass
