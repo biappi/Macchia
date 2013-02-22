@@ -45,6 +45,11 @@
 
                 $.getJSON('/info', fill_track_infos);
             })
+
+            setInterval(function() {
+                $.getJSON('/info', fill_track_infos);
+            }, 15000);
+
         </script>
     </body>
 </html>
