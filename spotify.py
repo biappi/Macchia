@@ -27,10 +27,12 @@ def get_dbus_spotify():
 
         def current_track(self):
             info = self.iface.GetMetadata()
+            artwork = info['mpris:artUrl'].replace('/thumb/', '/300/')
+
             return track_json_info(unicode(info['xesam:artist'][0]),
                                    unicode(info['xesam:album']),
                                    unicode(info['xesam:title']),
-                                   unicode(info['mpris:artUrl']))
+                                   unicode(artwork))
 
         def open_uri(self, uri):
             pass
