@@ -2,15 +2,38 @@ import json
 
 def get_dbus_spotify():
     import dbus
+    import gobject
+    import threading
+    from dbus.mainloop.glib import threads_init, DBusGMainLoop
 
-    bus  = dbus.SessionBus()
-    obj  = bus.get_object('org.mpris.MediaPlayer2.spotify', '/')
-    spot = dbus.Interface(obj, 'org.freedesktop.MediaPlayer2')
+    gobject.threads_init()
+    threads_init()
 
     class DbusSpotify:
-        def __init__(self, spot):
-            self.iface = spot
+        def __init__(self):
+            loop = DBusGMainLoop(set_as_default=True)
+            
+            bus  = dbus.SessionBus()
+            obj  = bus.get_object('org.mpris.MediaPlayer2.spotify', '/')
 
+            self.iface = dbus.Interface(obj,
+                                        'org.freedesktop.MediaPlayer2')
+    
+            service = bus.get_object('com.spotify.qt',
+                                     '/org/mpris/MediaPlayer2')
+        
+            service.connect_to_signal('TrackChange',
+                                      self.properties_changed)
+
+            service.connect_to_signal('PropertiesChanged',
+                                      self.properties_changed)
+            
+            self.notify_queue = None
+
+        def properties_changed(self, *data):
+            if self.notify_queue is not None:
+                self.notify_queue.put_nowait('update')
+    
         def play(self):
             self.iface.PlayPause()
 
@@ -45,8 +68,8 @@ def get_dbus_spotify():
                 'url':       url,
                 'full_info': full_info,
             })
-
-    return DbusSpotify(spot)
+    
+    return DbusSpotify()
 
 def get_osx_spotify():
     import Foundation
@@ -100,6 +123,5 @@ try:
     spotify = get_dbus_spotify()
 except ImportError:
     spotify = get_osx_spotify()
-
 
 # vim: filetype=python tabstop=4 shiftwidth=4 expandtab cindent:

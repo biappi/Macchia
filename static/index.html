@@ -28,6 +28,9 @@
             </div>
         </div>
 
+
+        <iframe id="stream" style="display: none" src="/streaming_info"></iframe>
+
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script>
             function fill_track_infos(infos) {
@@ -48,7 +51,7 @@
                 '')
                 $('#cover').attr('src', infos.art_url)
             }
-
+            
             $(document).ready(function() {
                 $('a').click(function(event) {
                     $.ajax($(this).attr('href')).done(function(x, res) { ; });
@@ -56,11 +59,9 @@
                 })
 
                 $.getJSON('/info', fill_track_infos);
-            })
 
-            setInterval(function() {
-                $.getJSON('/info', fill_track_infos);
-            }, 15000);
+                document.querySelector('#stream').contentWindow.update = fill_track_infos
+            })
 
         </script>
     </body>
