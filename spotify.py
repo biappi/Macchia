@@ -88,4 +88,4 @@ except ImportError:
     spotify = get_osx_spotify()
 
 
-# vim: filetype=python tabstop=4 shiftwidth=4 expandtab:
+# vim: filetype=python tabstop=4 shiftwidth=4 expandtab cindent:
