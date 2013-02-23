@@ -31,9 +31,21 @@
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script>
             function fill_track_infos(infos) {
-                $('#trackinfo').html('<dt>Artist</dt><dd>' + infos.artist + '</dd>' + 
-                                     '<dt>Album</dt><dd>'  + infos.album  + '</dd>' +
-                                     '<dt>Title</dt><dd>'  + infos.title  + '</dd>')
+                $('#trackinfo').html('' +
+                    '<dt>Artist</dt><dd>'   + infos.artist  + '</dd>' +
+                    '<dt>Album</dt><dd>'    + infos.album   + '</dd>' +
+                    '<dt>Title</dt><dd>'    + infos.title   + '</dd>' +
+                    '<dt>Track ID</dt><dd>' +
+                        '<a href="' + infos.trackid + '" target="_blank">' +
+                            infos.trackid +
+                        '</a>' +
+                    '</dd>' +
+                    '<dt>URL</dt><dd>'      +
+                        '<a href="' + infos.url + '" target="_blank">' +
+                            infos.url +
+                        '</a>' +
+                    '</dd>' +
+                '')
                 $('#cover').attr('src', infos.art_url)
             }
 

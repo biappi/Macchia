@@ -1,9 +1,4 @@
-def track_json_info(artist, album, title, art_url):
-    import json
-    return json.dumps({'artist':  artist,
-                       'album':   album,
-                       'title':   title,
-                       'art_url': art_url})
+import json
 
 def get_dbus_spotify():
     import dbus
@@ -29,13 +24,27 @@ def get_dbus_spotify():
             info = self.iface.GetMetadata()
             artwork = info['mpris:artUrl'].replace('/thumb/', '/300/')
 
-            return track_json_info(unicode(info['xesam:artist'][0]),
-                                   unicode(info['xesam:album']),
-                                   unicode(info['xesam:title']),
-                                   unicode(artwork))
+            artist = info.pop('xesam:artist')
+            all_keys = [ unicode(x) for x in info.keys() ]
 
-        def open_uri(self, uri):
-            pass
+            full_info = {
+                'xesam:artist': ', '.join([ unicode(x) for x in artist ]),
+            }
+            for x in all_keys:
+                full_info[x] = unicode(info[x])
+
+            url = info['xesam:url']
+            url = url.replace('spotify:track:', 'http://open.spotify.com/track/')
+
+            return json.dumps({
+                'artist':    unicode(full_info['xesam:artist']),
+                'album':     unicode(info['xesam:album']),
+                'title':     unicode(info['xesam:title']),
+                'art_url':   artwork,
+                'trackid':   info['mpris:trackid'],
+                'url':       url,
+                'full_info': full_info,
+            })
 
     return DbusSpotify(spot)
 
@@ -72,10 +81,15 @@ def get_osx_spotify():
             uri = 'data:image/png;base64,' + b64
 
             del pool
-            return track_json_info(track.artist(),
-                                   track.album(),
-                                   track.name(),
-                                   uri)
+            return json.dumps({
+                'artist':    track.artist(),
+                'album':     track.album(),
+                'title':     track.name(),
+                'art_url':   uri,
+                'trackid':   '',
+                'url':       '',
+                'full_info': {},
+            })
 
         def open_uri(self, uri):
             pass
