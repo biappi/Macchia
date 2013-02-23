@@ -54,7 +54,7 @@
             
             $(document).ready(function() {
                 $('a').click(function(event) {
-                    $.ajax($(this).attr('href')).done(function(x, res) { ; });
+                    $.ajax($(this).attr('href'), {'cache': false});
                     return false;
                 })
 
