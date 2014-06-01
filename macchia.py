@@ -62,12 +62,13 @@ class StreamingInfo:
             """ % (spotify.current_track(), )
 
 if __name__ == '__main__':
-    import threading
-    threading.Thread(target=app.run).start()
-
     try:
-        import gobject
-        gobject.MainLoop().run()
+	def run_loop():
+            import gobject
+            gobject.MainLoop().run()
+
+        threading.Thread(target=run_loop).start()
     except:
         pass
 
+    app.run()
